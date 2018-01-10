@@ -18,7 +18,7 @@ import {
     Button,
     ToastAndroid,
     ToolbarAndroid,
-    Alert
+    Alert,BackAndroid,StatusBar
 } from 'react-native';
 import MoveList from './App'
 
@@ -230,7 +230,7 @@ const App = StackNavigator({
     //导航栏相关设置项
     header:{
     	    //导航栏可见
-            visible : true,
+            visible : false,
             //左上角的返回键文字, 默认是上一个页面的title
             backTitle : "返回",
             //导航栏的style
@@ -261,4 +261,40 @@ const App = StackNavigator({
     onTransitionStart: ()=>{ console.log('导航栏切换开始'); },  // 回调
     onTransitionEnd: ()=>{ console.log('导航栏切换结束'); },  // 回调
 });
-export default App
+class Wrap extends Component {
+    constructor(props) {
+        super(props);
+        this.handleBack = this.handleBack.bind(this)
+    }
+
+    componentDidMount() {
+        BackAndroid.addEventListener('hardwareBackPress', this.handleBack)
+    }
+
+    componentWillUnmount() {
+        BackAndroid.removeEventListener('hardwareBackPress', this.handleBack)
+    }
+
+    handleBack() {
+        // if (navigator && navigator.getCurrentRoutes().length < 1) {
+        //     navigator.pop();
+        //     return true
+        // }
+        // return false
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <StatusBar
+                    backgroundColor='transparent'
+                    barStyle='light-content'
+                    translucent />
+                <App/>
+            </View>
+        )
+    }
+}
+
+
+export default Wrap
